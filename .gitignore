@@ -1,0 +1,6 @@
+*pyc
+check_point*
+*.ark
+fbank/
+data/
+save_models/
