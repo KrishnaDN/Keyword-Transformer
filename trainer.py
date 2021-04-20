@@ -30,8 +30,8 @@ def parse_args():
     parser.add_argument('-dev_manifest',type=str,default='manifest/valid')
     
     parser.add_argument('-num_classes', action="store_true", default=12)
-    parser.add_argument('-train_batch_size', action="store_true", default=32)
-    parser.add_argument('-dev_batch_size', action="store_true", default=32)
+    parser.add_argument('-train_batch_size', action="store_true", default=256)
+    parser.add_argument('-dev_batch_size', action="store_true", default=256)
     
     parser.add_argument('-use_gpu', action="store_true", default=True)
     
@@ -39,7 +39,7 @@ def parse_args():
     parser.add_argument('-num_epochs', action="store_true", default=100)
     parser.add_argument('-save_interval', action="store_true", default=1000)
     parser.add_argument('-log_interval', action="store_true", default=100)
-    parser.add_argument('-lr', action="store_true", default=0.0005)
+    parser.add_argument('-lr', action="store_true", default=0.001)
     
     args = parser.parse_args()
     return args
@@ -63,7 +63,7 @@ def train(model, device, train_loader, optimizer, epoch, log_interval=100):
         criterion = nn.CrossEntropyLoss().to(device)
         label_smoothing = LabelSmoothingLoss(size=12, padding_idx=0, smoothing=0.1)
         
-        loss = criterion(output, target) + label_smoothing(output, target)
+        loss = criterion(output, target) + 0.0*label_smoothing(output, target)
         train_loss += loss
         optimizer.zero_grad()
         with amp.scale_loss(loss, optimizer) as scaled_loss:
@@ -113,7 +113,7 @@ def test(model, device, test_loader, ep):
             criterion = nn.CrossEntropyLoss().to(device)
             label_smoothing = LabelSmoothingLoss(size=12, padding_idx=0, smoothing=0.1)
         
-            loss = criterion(output, target) + label_smoothing(output, target)
+            loss = criterion(output, target) + 0.0*label_smoothing(output, target)
             test_loss += loss
             pred = output.argmax(dim=1, keepdim=True)
             correct += pred.eq(target.view_as(pred)).sum().item()
@@ -155,11 +155,11 @@ def main():
     print("Use", device)
     model = ViT(
         image_size = (98,40),
-        patch_size = (2,5),
+        patch_size = (2,20),
         num_classes = 12,
         dim = 64,
         depth = 12,
-        heads = 3,
+        heads = 4,
         mlp_dim = 256,
         dropout = 0.1,
         emb_dropout = 0.1
@@ -174,7 +174,7 @@ def main():
     dev_loader = DataLoader(devset,batch_size=args.dev_batch_size,shuffle=False,num_workers=8,pin_memory=True, collate_fn=collate_fun)
     
     
-    optimizer = optim.AdamW(model.parameters(),lr=args.lr, weight_decay = 5e-5)
+    optimizer = optim.AdamW(model.parameters(),lr=args.lr, weight_decay = 0.1)
     model, optimizer = amp.initialize(model, optimizer, opt_level="O2")
     
     
@@ -188,7 +188,7 @@ def main():
         train(model, device, train_loader, optimizer, epoch, args.log_interval)
         
         acc = test(model, device, dev_loader, epoch)  # evaluate at the end of epoch
-        scheduler.step(acc)
+        #scheduler.step(acc)
         model_save_path = os.path.join('trained_models_test', 'check_point_'+str(epoch)+'_'+str(acc))
         state_dict = {'model': model.state_dict(),'optimizer': optimizer.state_dict(),'epoch': epoch}
         torch.save(state_dict, model_save_path)
@@ -196,9 +196,4 @@ def main():
 if __name__ == '__main__':
     main()
     
-    
-
-## mtl weight = 0.5 dev-eer 0.52 -eval-eer 0.91
-## mtl weight = 1.0 dev-eer 0.57 -eval-eer 1.052
-
     

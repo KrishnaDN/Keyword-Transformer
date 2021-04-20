@@ -126,10 +126,10 @@ def collate_fun(batch):
         label = item[1]
         features.append(feats)
         labels.append(label)
-        features.append(torch.Tensor(_spec_augmentation(feats)))
-        labels.append(label)
-        features.append(torch.Tensor(_spec_substitute(feats)))
-        labels.append(label)
+        #features.append(torch.Tensor(_spec_augmentation(feats)))
+        #labels.append(label)
+        #features.append(torch.Tensor(_spec_substitute(feats)))
+        #labels.append(label)
     
     return features, labels
 
