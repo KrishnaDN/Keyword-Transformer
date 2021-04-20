@@ -1,12 +1,9 @@
 #!/bin/bash
 
-# Copyright 2019 Mobvoi Inc. All Rights Reserved.
-
 . ./path.sh || exit 1;
 . ./cmd.sh || exit 1;
 
-# Use this to control how many gpu you use, It's 1-gpu training if you specify
-# just 1gpu, otherwise it's is multiple gpu training based on DDP in pytorch
+
 export CUDA_VISIBLE_DEVICES="0"
 stage=0 # start from 0 if you need to start from data preparation
 stop_stage=6
@@ -16,10 +13,7 @@ feat_dir=fbank
 dict=data/dict/lang_char.txt
 manifest=manifest
 train_set=train_sp
-# Optional train_config
-# 1. conf/train_transformer.yaml: Standard transformer
-# 2. conf/train_conformer.yaml: Standard conformer
-# 3. conf/train_unified_conformer.yaml: Unified dynamic chunk causal conformer
+
 cmvn=true
 compress=true
 fbank_conf=conf/fbank.conf
