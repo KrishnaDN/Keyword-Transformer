@@ -31,8 +31,6 @@ utils/perturb_data_dir_speed.sh 0.9 data/train data/train_sp0.9
 utils/perturb_data_dir_speed.sh 1.1 data/train data/train_sp1.1
 utils/combine_data.sh data/train_sp data/train data/train_sp0.9 data/train_sp1.1
 
-
-
 if [ ${stage} -le 1 ]; then
     # Feature extraction
     mkdir -p $feat_dir

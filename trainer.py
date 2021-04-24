@@ -30,8 +30,8 @@ def parse_args():
     parser.add_argument('-dev_manifest',type=str,default='manifest/valid')
     
     parser.add_argument('-num_classes', action="store_true", default=12)
-    parser.add_argument('-train_batch_size', action="store_true", default=256)
-    parser.add_argument('-dev_batch_size', action="store_true", default=256)
+    parser.add_argument('-train_batch_size', action="store_true", default=512)
+    parser.add_argument('-dev_batch_size', action="store_true", default=512)
     
     parser.add_argument('-use_gpu', action="store_true", default=True)
     
@@ -188,7 +188,7 @@ def main():
         train(model, device, train_loader, optimizer, epoch, args.log_interval)
         
         acc = test(model, device, dev_loader, epoch)  # evaluate at the end of epoch
-        #scheduler.step(acc)
+        scheduler.step(acc)
         model_save_path = os.path.join('trained_models_test', 'check_point_'+str(epoch)+'_'+str(acc))
         state_dict = {'model': model.state_dict(),'optimizer': optimizer.state_dict(),'epoch': epoch}
         torch.save(state_dict, model_save_path)
