@@ -114,10 +114,6 @@ class SpeechGenerator():
         return tensor_feat.unsqueeze(0), torch.LongTensor([int(label)])
         
 
-
-gen = SpeechGenerator('manifest/test')
-
-
 def collate_fun(batch):
     features = []
     labels = []
