@@ -3,7 +3,7 @@
 """
 Created on Mon Apr 19 23:45:47 2021
 
-@author: krishna
+@author: lucidrains (modified by Krishna)
 """
 
 import torch
