@@ -1,5 +1,7 @@
 # Keyword-Transformer
 Implementation of the paper "Keyword Transformer: A Self-Attention Model for Keyword Spotting"
+Our implementation obtains 96.2% accuracy on the test data.
+
 
 ## Kaldi Data preperation
 In order to extract the features from kaldi, we need to create few files for kaldi (standerd procedure).
