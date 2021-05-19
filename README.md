@@ -1,5 +1,6 @@
 # Keyword-Transformer
-Implementation of the paper "Keyword Transformer: A Self-Attention Model for Keyword Spotting"
+Implementation of the paper "Keyword Transformer: A Self-Attention Model for Keyword Spotting".
+
 Our implementation obtains 96.2% accuracy on the test data.
 
 
